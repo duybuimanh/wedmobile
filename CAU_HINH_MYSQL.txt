@@ -1,0 +1,88 @@
+═══════════════════════════════════════════════════════════════
+  HƯỚNG DẪN CẤU HÌNH MYSQL CHO DỰ ÁN WEDMOBILE
+═══════════════════════════════════════════════════════════════
+
+BƯỚC 1: TẠO DATABASE MYSQL
+───────────────────────────────────────────────────────────────
+Cách 1: Sử dụng phpMyAdmin (Khuyến nghị)
+  1. Mở trình duyệt, truy cập: http://localhost/phpmyadmin
+  2. Click vào tab "New" hoặc "Mới" ở sidebar trái
+  3. Nhập tên database: wedmobile
+  4. Chọn Collation: utf8mb4_unicode_ci
+  5. Click "Create" hoặc "Tạo"
+
+Cách 2: Sử dụng MySQL Command Line
+  1. Mở Command Prompt/Terminal
+  2. Chạy: mysql -u root -p
+  3. Nhập mật khẩu (nếu có, hoặc Enter nếu không có)
+  4. Chạy: CREATE DATABASE wedmobile CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+  5. Hoặc chạy file create-database.sql đã tạo sẵn
+
+
+BƯỚC 2: KIỂM TRA FILE .ENV
+───────────────────────────────────────────────────────────────
+File .env đã được cấu hình tự động với các thông tin sau:
+
+  DB_CONNECTION=mysql
+  DB_HOST=127.0.0.1
+  DB_PORT=3306
+  DB_DATABASE=wedmobile
+  DB_USERNAME=root
+  DB_PASSWORD=
+
+Nếu bạn có mật khẩu MySQL, hãy sửa DB_PASSWORD trong file .env
+
+
+BƯỚC 3: CHẠY MIGRATIONS
+───────────────────────────────────────────────────────────────
+Mở Command Prompt/Terminal tại thư mục dự án và chạy:
+
+  php artisan migrate
+
+Lệnh này sẽ tạo tất cả các bảng trong database
+
+
+BƯỚC 4: TẠO TÀI KHOẢN ADMIN
+───────────────────────────────────────────────────────────────
+Chạy lệnh sau để tạo tài khoản admin:
+
+  php artisan db:seed --class=AdminUserSeeder
+
+Thông tin đăng nhập admin:
+  Email: admin@example.com
+  Password: password
+
+
+═══════════════════════════════════════════════════════════════
+  KIỂM TRA KẾT NỐI
+═══════════════════════════════════════════════════════════════
+
+Để kiểm tra kết nối MySQL có thành công không:
+
+  php artisan tinker
+
+Trong tinker, chạy:
+  DB::connection()->getPdo();
+
+Nếu không có lỗi, kết nối đã thành công!
+
+
+═══════════════════════════════════════════════════════════════
+  XỬ LÝ LỖI THƯỜNG GẶP
+═══════════════════════════════════════════════════════════════
+
+❌ Lỗi: Access denied for user 'root'@'localhost'
+   → Kiểm tra DB_USERNAME và DB_PASSWORD trong file .env
+   → Đảm bảo user MySQL có quyền truy cập
+
+❌ Lỗi: No connection could be made
+   → Kiểm tra MySQL service đã chạy chưa (trong XAMPP Control Panel)
+   → Kiểm tra DB_HOST và DB_PORT có đúng không
+
+❌ Lỗi: Unknown database 'wedmobile'
+   → Đảm bảo đã tạo database wedmobile (Bước 1)
+   → Kiểm tra tên database trong .env có đúng không
+
+═══════════════════════════════════════════════════════════════
+
+
